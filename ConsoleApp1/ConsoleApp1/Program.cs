@@ -1,4 +1,5 @@
-﻿using Microsoft.Azure;
+﻿using ConsoleApp1.Entities;
+using Microsoft.Azure;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using System;
@@ -17,7 +18,16 @@ namespace ConsoleApp1
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
             CloudTable table = tableClient.GetTableReference("customers");
             table.CreateIfNotExists();
+            CreateCustomer(table, new CustomerUS("Kumar", "kumar.c.k@capgemini.com"));
+
             Console.ReadKey();
+        }
+
+
+        static void CreateCustomer(CloudTable table, CustomerUS customer)
+        {
+            TableOperation insert = TableOperation.Insert(customer);
+            table.Execute(insert);
         }
     }
 }
