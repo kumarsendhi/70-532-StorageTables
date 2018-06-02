@@ -19,5 +19,12 @@ namespace ConsoleApp1.Entities
             this.PartitionKey = "US";
             this.RowKey = email;
         }
+
+        public CustomerUS()
+        {
+
+        }
+
+
     }
 }

@@ -18,7 +18,8 @@ namespace ConsoleApp1
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
             CloudTable table = tableClient.GetTableReference("customers");
             table.CreateIfNotExists();
-            CreateCustomer(table, new CustomerUS("Kumar", "kumar.c.k@capgemini.com"));
+            //CreateCustomer(table, new CustomerUS("Kumar", "kumar.c.k@capgemini.com"));
+            GetCustomer(table, "US", "kumar.c.k@capgemini.com");
 
             Console.ReadKey();
         }
@@ -28,6 +29,16 @@ namespace ConsoleApp1
         {
             TableOperation insert = TableOperation.Insert(customer);
             table.Execute(insert);
+        }
+
+        static void GetCustomer(CloudTable table, string partitionKey,string rowKey)
+        {
+            TableOperation retrieve = TableOperation.Retrieve<CustomerUS>(partitionKey, rowKey);
+            var result = table.Execute(retrieve);
+            Console.WriteLine(((CustomerUS)result.Result).Name);
+            Console.WriteLine(((CustomerUS)result.Result).Email);
+            Console.WriteLine(((CustomerUS)result.Result).PartitionKey);
+            Console.WriteLine(((CustomerUS)result.Result).RowKey);
         }
     }
 }
