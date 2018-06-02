@@ -19,7 +19,8 @@ namespace ConsoleApp1
             CloudTable table = tableClient.GetTableReference("customers");
             table.CreateIfNotExists();
             //CreateCustomer(table, new CustomerUS("Kumar", "kumar.c.k@capgemini.com"));
-            GetCustomer(table, "US", "kumar.c.k@capgemini.com");
+            //GetCustomer(table, "US", "kumar.c.k@capgemini.com");
+            GetAllCustomers(table);
 
             Console.ReadKey();
         }
@@ -39,6 +40,17 @@ namespace ConsoleApp1
             Console.WriteLine(((CustomerUS)result.Result).Email);
             Console.WriteLine(((CustomerUS)result.Result).PartitionKey);
             Console.WriteLine(((CustomerUS)result.Result).RowKey);
+        }
+
+        static void GetAllCustomers(CloudTable table)
+        {
+            TableQuery<CustomerUS> query = new TableQuery<CustomerUS>().Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, "US"));
+
+            foreach(CustomerUS customer in table.ExecuteQuery(query))
+            {
+                Console.WriteLine(customer.Name);
+                Console.WriteLine(customer.Email);
+            }
         }
     }
 }
